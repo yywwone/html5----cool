@@ -1,0 +1,119 @@
+<!--文档类型document type-->
+<!doctype html>
+
+<html lang="en">
+ <!--网页代码的头部
+	在html标签之中，有99%的标签，都是成对出现
+	head，title标签
+ -->
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>天猫猜奖游戏</title>
+  <!--
+	  css层叠样式表
+	  css就是打扮我们网页内容的（让网页变得漂亮），网页设计师
+	  一定是写在head标签里面的<style></style>里面
+  -->
+  <style type="text/css">
+	/**
+		选择器{
+			样式属性名称:属性值;
+		}
+		选择器的意思就是说你到底要改变什么标签
+	**/
+	
+	body{
+		background-image:url(images/bg.png);
+	}
+	table{
+		/**
+			电脑的分辨率1024（width）*768（height）
+		*/
+		color:#ffffff;
+		/*让table水平居中*/
+		margin:auto;
+		margin-top:40px;
+	}
+	table tr td{
+		width:110px;
+		height:110px;
+	}
+	a.button{
+		width:150px;
+		height:40px;
+		line-height:40px;
+		background-color:rgb(106, 38, 19);
+		display:inline-block;
+		position:relative;
+		border-radius:3px;
+		top:100px;
+		font-family:'Microsoft Yahei';
+	}
+	a.button:hover{
+		cursor:pointer;
+		background-color:#481305;
+	}
+	div.target{
+		background-image:url(images/target.png);
+		width:114px;
+		height:114px;
+		position:absolute;/*这句代码的作用就是让我们target那个框框漂浮起来*/
+		top:0px;
+		left:0px;
+	}
+  </style>
+ </head>
+ <!--网页代码的身体部分-->
+ <body>
+	<!--
+		表格标签<table></table>
+		行<tr></tr>
+		列<td></td>
+	-->
+	<table border="0" cellpadding="0" cellspacing="1">
+		<tr>
+			<td id="0" style="background-image:url(images/0.jpg);"></td>
+			<td id="1" style="background-image:url(images/1.jpg);"></td>
+			<td id="2" style="background-image:url(images/2.jpg);"></td>
+			<td id="3" style="background-image:url(images/3.jpg);"></td>
+			<td id="4" style="background-image:url(images/4.jpg);"></td>
+			<td id="5" style="background-image:url(images/5.jpg);"></td>
+			<td id="6" style="background-image:url(images/6.jpg);"></td>
+		</tr>
+		<tr>
+			<td id="19" style="background-image:url(images/19.jpg);"></td>
+			<td colspan="5" rowspan="3" style="text-align:center;background-image:url(images/center.jpg);">
+				<a class="button" onclick="startRun()">开始抽奖</a>
+				<a class="button" onclick="init();">重&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;置</a>
+			</td>
+			<td id="7" style="background-image:url(images/7.jpg);"></td>
+		</tr>
+		<tr>
+			<td id="18" style="background-image:url(images/18.jpg);"></td>
+			<td id="8" style="background-image:url(images/8.jpg);"></td>
+		</tr>
+		<tr>
+			<td id="17" style="background-image:url(images/17.jpg);"></td>
+			<td id="9" style="background-image:url(images/9.jpg);"></td>
+		</tr>
+		<tr>
+			<td id="16" style="background-image:url(images/16.jpg);"></td>
+			<td id="15" style="background-image:url(images/15.jpg);"></td>
+			<td id="14" style="background-image:url(images/14.jpg);"></td>
+			<td id="13" style="background-image:url(images/13.jpg);"></td>
+			<td id="12" style="background-image:url(images/12.jpg);"></td>
+			<td id="11" style="background-image:url(images/11.jpg);"></td>
+			<td id="10" style="background-image:url(images/10.jpg);"></td>
+		</tr>
+	</table>
+
+	<div class="target"></div>
+	<!--代表的就是引入我们jquery类库-->
+	<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="js/game.js"></script>
+ </body>
+</html>

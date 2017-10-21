@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+	*{ 
+		margin:0; 
+		padding:0; 
+		font-family:"微软雅黑";
+	}
+	#outer{ background:url(img/game_bg.jpg) 0 0 no-repeat;
+	  height:480px;
+	  width:320px;
+	  position:relative;
+	}
+	#scoring{ 
+		position:absolute; 
+		font-weight:bold; 
+		font-size:16px; 
+		color:white; 
+		left:65px; 
+		top:13px;
+	}
+	#countDown{ 
+		position:absolute; 
+		background:url(img/progress.png) 0 0 no-repeat; 
+		width:180px; 
+		height:16px; 
+		left: 63px;
+		top: 66px;
+	}
+	#wolfs img{ 
+		position:absolute;
+	}
+	#menu{ 
+		position:absolute; 
+		width:320px; 
+		text-align:center; 
+		left:0; top:200px;
+	}
+	#start,#handle,#gameOver{ 
+		line-height:50px; font-size:30px; 
+		font-weight:bold; color:#F60; 
+		text-shadow:0 0 5px #FFFF00; 
+		display:block; 
+		text-decoration:none;
+	}
+	#gameOver{ 
+		position:absolute; 
+		width:320px; 
+		text-align:center; 
+		top:200px; 
+		left:0; 
+		display:none;
+	}
+	</style>
+
+</head>
+<body>
+<div id="outer">
+	<!--这是分数-->
+	<div id="scoring">0</div>
+	<!--倒计时-->
+    <div id="countDown"></div>
+    <!--灰太狼们-->
+    <div id="wolfs">
+    	 <!-- <img src="img/h5.png"/>  -->
+    </div>
+    <div id="menu">
+        <a href="#" id="start">开始</a>
+        <a href="#" id="handle">游戏操作说明</a>
+    </div>
+    <div id="gameOver">game over!</div>
+</div>
+</body>
+<script type="text/javascript">
+	// 存放狼图片的div
+	var wolfsDiv = document.querySelector("#wolfs");
+	// 获取计时进度条div
+	var countDownDiv = document.querySelector("#countDown");
+	// 获取菜单div
+	var menu = document.querySelector("#menu");
+	var creatWolfTimer = null;
+	// 获取开始按钮
+	var startBtn = document.querySelector("#start");
+	// 获取游戏结束div
+	var gameOverDiv = document.querySelector("#gameOver");
+	// 获取得分div
+	var scoreDiv = document.querySelector("#scoring");
+	// 用一个对象，存放灰太狼出现的位置
+	var wolfStartArr = [  {left:"98px",top:"115px"},
+					{left:"17px",top:"160px"},
+					{left:"15px",top:"220px"},
+					{left:"30px",top:"293px"},
+					{left:"122px",top:"273px"},
+					{left:"207px",top:"295px"},
+					{left:"200px",top:"211px"},
+					{left:"187px",top:"141px"},
+					{left:"100px",top:"185px"}];
+
+	// 给按钮添加点击事件
+	startBtn.onclick = function(){
+		//隐藏菜单
+		menu.style.display = "none";
+		// 改变进度条
+		var w = countDownDiv.offsetWidth;
+		var countTimer = setInterval(function(){
+			w--;
+			// 不断改变countDiv的宽度
+			countDownDiv.style.width = w + "px";
+			// 当宽度小于0的时候，清除定时器
+			if(w <= 0){
+				clearInterval(countTimer);
+				clearInterval(creatWolfTimer);
+				// 显示游戏结束div
+				gameOverDiv.style.display = "block";
+
+			}
+
+		},100)
+		// 存放狼出现位置的数组
+		var aStart = [];
+		var arrIndex = 0;
+		//创建狼
+		creatWolfTimer = setInterval(function(){
+			// 存放狼出现的位置
+			var wolfIndex = randFn(0,8);
+			// 把wolfIndex存放到aStar它里面
+			aStart.push(wolfIndex);
+			if(aStart[arrIndex] != aStart[arrIndex-1]){
+				// 创建狼
+				var wolf = document.createElement("img");
+				if(randFn(0,100) > 90){
+					wolf.type = "x";
+				}else{
+					wolf.type = "h";
+				}
+				wolf.index = 0;
+				wolf.src = "img/"+wolf.type+wolf.index+".png";
+				wolf.style.left = wolfStartArr[wolfIndex].left;
+				wolf.style.top = wolfStartArr[wolfIndex].top;
+				wolfsDiv.appendChild(wolf);
+
+				// 狼出现
+				wolf.upFn = setInterval(function(){
+					wolf.index++;
+					if(wolf.index <= 5){
+						wolf.src = "img/"+wolf.type + wolf.index + ".png";
+					}else{
+						// 清除upFn定时器
+						clearInterval(wolf.upFn);
+		// 狼消失
+		wolf.downFn = setInterval(function(){
+			wolf.index--;
+			wolf.src = "img/"+wolf.type + wolf.index + ".png";
+			if(wolf.index <= 0){
+				clearInterval(wolf.downFn);
+				//停止动画，并删除节点
+				wolfsDiv.removeChild(wolf);
+			}
+		},150)
+	}
+					
+				},100)
+				//开关->只允许点击一次狼
+				var bol = false;
+				// 给狼添加点击事件
+				wolf.onclick = function(){
+					// 如果bol等于true，就不让下面的程序执行
+					// if(bol == true){
+					// 	return;
+					// }
+					bol = true;
+					clearInterval(wolf.upFn);
+					clearInterval(wolf.downFn);
+					wolf.index = 5;
+					wolf.hit = setInterval(function(){
+						wolf.index++;
+						wolf.src = "img/"+wolf.type + wolf.index + ".png";
+						if(wolf.index >= 9){
+							clearInterval(wolf.hit);
+							//删除狼
+							wolfsDiv.removeChild(wolf);
+						}
+					},150)
+					
+					// 得分
+					// 判断狼类型:
+					// 如果敲打的是小灰灰，扣10分
+					// 如果敲打的是灰太狼，加10分
+					if(wolf.type == "x"){
+						scoreDiv.innerHTML = Number(scoreDiv.innerHTML) - 10;
+					}else{
+						scoreDiv.innerHTML = Number(scoreDiv.innerHTML) + 10;
+					}	
+				}
+
+			}
+
+		arrIndex++;
+		},800)
+
+	}
+
+	// 随机数
+	function randFn(min,max){
+		return parseInt(Math.random()*(max - min + 1)+min);
+	}
+	//阻止默认事件
+	document.onmousedown = function(e){
+		var ev = e || window.event;
+		ev.preventDefault();
+	}
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</html>
